@@ -1,14 +1,22 @@
 ---
-
-- hosts: all
+- name: Install Apache, start service, and open HTTP port in firewall
+  hosts: all
   become: true
   tasks:
+    - name: Install httpd package
+      yum:
+        name: httpd
+        state: present
 
-  - name: install httpd package
-    yum:
-      name: httpd
+    - name: Start and enable httpd service
+      systemd:
+        name: httpd
+        state: started
+        enabled: yes
 
-  - name: start httpd service
-    systemd:
-      name: httpd
-      state: started
+    - name: Open HTTP (port 80) in firewalld permanently
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes   # Apply rule now without reload
