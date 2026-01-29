@@ -1,0 +1,54 @@
+---
+# 针对 Web 服务器：安装 Apache
+- name: Configure web servers (Apache)
+  hosts: web_servers
+  become: true # 请用 sudo 以 root 身份运行这个任务
+  tasks:
+    - name: Install httpd package
+      yum:
+        name: httpd
+        state: present
+
+    - name: Start and enable httpd service
+      systemd:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Open HTTP port (80) in firewall
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+# 针对 DB/应用服务器：安装 Tomcat
+- name: Configure application servers (Tomcat)
+  hosts: db_servers
+  become: true
+  tasks:
+    - name: Install Java (required for Tomcat)
+      yum:
+        name: java-1.8.0-openjdk
+        state: present
+
+    - name: Install Tomcat packages
+      yum:
+        name:
+          - tomcat
+          - tomcat-webapps
+          - tomcat-admin-webapps
+        state: present
+
+    - name: Start and enable tomcat service
+      systemd:
+        name: tomcat
+        state: started
+        enabled: yes
+
+    - name: Open Tomcat HTTP port (8080) in firewall
+      firewalld:
+        port: 8080/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
