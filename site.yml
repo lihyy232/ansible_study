@@ -24,6 +24,16 @@
         permanent: yes
         state: enabled
         immediate: yes
+   
+    - name: copy default html file for site
+      tags: usefile
+      copy:
+        src: default_site.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
+
 
 # 针对 DB/应用服务器：安装 Tomcat
 - name: Configure application servers (Tomcat)
