@@ -1,0 +1,16 @@
+---
+- hosts: db_servers
+  become: true
+  tasks:
+    - name: Install unzip utility
+      package:
+        name: unzip
+        state: present
+
+    - name: Install Terraform
+      unarchive: # 功能：用于解压归档文件（如 .zip, .tar.gz, .tar.bz2 等）到目标主机的指定目录。
+        src: terraform_1.14.4_linux_amd64.zip # 指定源压缩包的路径。
+        dest: /usr/local/bin # 指定解压后文件存放的目标目录。
+        mode: '0755' # 设置解压后文件的权限
+        owner: root 
+        group: root
