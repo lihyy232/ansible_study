@@ -5,17 +5,20 @@
   become: true # 请用 sudo 以 root 身份运行这个任务
   tasks:
     - name: Install httpd package
+      tags: httpd
       yum:
         name: httpd
         state: present
 
     - name: Start and enable httpd service
+      tags: start
       systemd:
         name: httpd
         state: started
         enabled: yes
 
     - name: Open HTTP port (80) in firewall
+      tags: open
       firewalld:
         service: http
         permanent: yes
@@ -41,12 +44,14 @@
         state: present
 
     - name: Start and enable tomcat service
+      tags: start
       systemd:
         name: tomcat
         state: started
         enabled: yes
 
     - name: Open Tomcat HTTP port (8080) in firewall
+      tags: open
       firewalld:
         port: 8080/tcp
         permanent: yes

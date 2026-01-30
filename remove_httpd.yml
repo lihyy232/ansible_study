@@ -4,7 +4,15 @@
   become: true
   tasks:
 
-  - name: remove httpd 
+  - name: stop httpd
+    tags: stop
+    systemd:
+      name: httpd
+      state: stopped
+
+  - name: remove httpd
+    tags: remove
     yum:
       name: httpd
       state: absent
+
