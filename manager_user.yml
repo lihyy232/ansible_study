@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: create a user
+    tags: always
+    user:
+      name: simon
+      groups: root
+
+  - name: add ssh key for simon
+    tags: always
+    authorized_key:
+      user: simon
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIKICV+yoztIKfsPmZCCvsplfqR7jeYwHD0DwA7gXgaQ ansible"
+  
+  - name: add sudoers file for simon
+    tags: always
+    copy:
+      src: sudoer_simon
+      dest: /etc/sudoers.d/simon
+      owner: root
+      group: root
+      mode: 0440
